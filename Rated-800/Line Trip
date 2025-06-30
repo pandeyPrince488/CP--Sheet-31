@@ -1,0 +1,81 @@
+//this is a brute force approach by finding the maximu gap and we got the minimum tank size value by this 
+#include <bits/stdc++.h>
+using namespace std;
+int mindMinimumTankSize(vector<int>&arr,int n,int x)
+{
+    arr.push_back(0);
+    arr.push_back(x);
+    sort(arr.begin(),arr.end());
+    int maxGap=0;
+    for(int i=1;i<arr.size();i++)
+    {
+        int gap=arr[i]-arr[i-1];
+        
+        if(arr[i]==x)gap*=2;
+        maxGap=max(maxGap,gap);
+    }
+    return maxGap;
+}
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n,x;
+        cin>>n>>x;
+        vector<int>arr(n);
+        for(int i=0;i<n;i++)
+        {
+            cin>>arr[i];
+        }
+        int result=mindMinimumTankSize(arr,n,x);
+         cout << result << "\n";
+    }
+    return 0;
+}
+
+
+//have a optimized bianry search approach
+#include <bits/stdc++.h>
+using namespace std;
+ 
+bool canTravel(int tankSize, vector<int> gasStations, int x) {
+    gasStations.push_back(0);
+    gasStations.push_back(x);
+    sort(gasStations.begin(), gasStations.end());
+ 
+    for (int i = 1; i < gasStations.size(); ++i) {
+        int gap = gasStations[i] - gasStations[i - 1];
+        if (i == gasStations.size() - 1) gap *= 2;
+        if (gap > tankSize) return false;
+    }
+ 
+    return true;
+}
+ 
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, x;
+        cin >> n >> x;
+        vector<int> gasStations(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> gasStations[i];
+        }
+ 
+        int low = 1, high = 2 * x, ans = 2 * x;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (canTravel(mid, gasStations, x)) {
+                ans = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+ 
+        cout << ans << "\n";
+    }
+    
